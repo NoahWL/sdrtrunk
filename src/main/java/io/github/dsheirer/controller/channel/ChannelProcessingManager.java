@@ -174,85 +174,76 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
 
         switch(event.getEvent())
         {
-            case REQUEST_ENABLE:
-                if(!isProcessing(channel))
+        case REQUEST_ENABLE:
+            try
+            {
+                startProcessing(event);
+            }
+            catch(ChannelException ce)
+            {
+                if(channel.getSourceConfiguration() instanceof SourceConfigTuner)
                 {
-                    try
-                    {
-                        startProcessing(event);
-                    }
-                    catch(ChannelException ce)
-                    {
-                        if(channel.getSourceConfiguration() instanceof SourceConfigTuner)
-                        {
-                            long frequency = ((SourceConfigTuner)channel.getSourceConfiguration()).getFrequency();
+                    long frequency = ((SourceConfigTuner) channel.getSourceConfiguration()).getFrequency();
 
-                            if(!mUnTunableFrequencies.contains(frequency))
-                            {
-                                mUnTunableFrequencies.add(frequency);
-                                mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequency +
-                                    "] - " + ce.getMessage());
-                            }
-                        }
-                        else if(channel.getSourceConfiguration() instanceof SourceConfigTunerMultipleFrequency)
-                        {
-                            List<Long> frequencies = ((SourceConfigTunerMultipleFrequency)channel
-                                .getSourceConfiguration()).getFrequencies();
+                    if(!mUnTunableFrequencies.contains(frequency))
+                    {
+                        mUnTunableFrequencies.add(frequency);
+                        mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequency +
+                                "] - " + ce.getMessage());
+                    }
+                }
+                else if(channel.getSourceConfiguration() instanceof SourceConfigTunerMultipleFrequency)
+                {
+                    List<Long> frequencies = ((SourceConfigTunerMultipleFrequency) channel
+                                                                                          .getSourceConfiguration()).getFrequencies();
 
-                            if(frequencies.size() > 0 && !mUnTunableFrequencies.contains(frequencies.get(0)))
-                            {
-                                mUnTunableFrequencies.add(frequencies.get(0));
-                                mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequencies +
-                                    "] - " + ce.getMessage());
-                            }
-                        }
-                        else
-                        {
-                            mLog.error("Error starting requested channel [" + channel.getName() + "] - " + ce.getMessage());
-                        }
+                    if(frequencies.size() > 0 && !mUnTunableFrequencies.contains(frequencies.get(0)))
+                    {
+                        mUnTunableFrequencies.add(frequencies.get(0));
+                        mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequencies +
+                                "] - " + ce.getMessage());
                     }
                 }
-                break;
-            case REQUEST_DISABLE:
-                if(channel.isProcessing())
+                else
                 {
-                    try
-                    {
-                        switch(channel.getChannelType())
-                        {
-                            case STANDARD:
-                                stopProcessing(channel, true);
-                                break;
-                            case TRAFFIC:
-                                //Don't remove traffic channel processing chains
-                                //until explicitly deleted, so that we can reuse them
-                                stopProcessing(channel, false);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    catch(ChannelException ce)
-                    {
-                        mLog.error("Error stopping channel [" + channel.getName() + "] - " + ce.getMessage());
-                    }
+                    mLog.error("Error starting requested channel [" + channel.getName() + "] - " + ce.getMessage());
                 }
-                break;
-            case NOTIFICATION_DELETE:
-                if(channel.isProcessing())
+            }
+            break;
+        case REQUEST_DISABLE:
+            try
+            {
+                switch(channel.getChannelType())
                 {
-                    try
-                    {
-                        stopProcessing(channel, true);
-                    }
-                    catch(ChannelException ce)
-                    {
-                        mLog.error("Error stopping deleted channel [" + channel.getName() + "] - " + ce.getMessage());
-                    }
+                case STANDARD:
+                    stopProcessing(channel, true);
+                    break;
+                case TRAFFIC:
+                    // Don't remove traffic channel processing chains
+                    // until explicitly deleted, so that we can reuse them
+                    stopProcessing(channel, false);
+                    break;
+                default:
+                    break;
                 }
-                break;
-            default:
-                break;
+            }
+            catch(ChannelException ce)
+            {
+                mLog.error("Error stopping channel [" + channel.getName() + "] - " + ce.getMessage());
+            }
+            break;
+        case NOTIFICATION_DELETE:
+            try
+            {
+                stopProcessing(channel, true);
+            }
+            catch(ChannelException ce)
+            {
+                mLog.error("Error stopping deleted channel [" + channel.getName() + "] - " + ce.getMessage());
+            }
+            break;
+        default:
+            break;
         }
     }
 
