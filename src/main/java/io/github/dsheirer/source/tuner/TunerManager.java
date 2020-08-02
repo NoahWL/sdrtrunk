@@ -50,6 +50,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * TunerManager handles the discovery and initialization of USB tuner devices at startup.
+ *
+ */
 public class TunerManager
 {
     private final static Logger mLog = LoggerFactory.getLogger(TunerManager.class);
