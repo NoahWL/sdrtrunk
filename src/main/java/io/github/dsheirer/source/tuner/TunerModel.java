@@ -449,6 +449,16 @@ public class TunerModel extends AbstractTableModel implements Listener<TunerEven
                 mLog.info("Unable to source channel [" + tunerChannel.getFrequency() + "] from preferred tuner [" +
                     preferredTuner + "] - searching for another tuner");
             }
+            
+            tuner = findBestTuner(tunerChannel);
+            try
+            {
+                source = tuner.getChannelSourceManager().getSource(tunerChannel, channelSpecification);
+            }
+            catch(Exception e)
+            {
+                mLog.info("No tuners already tuned for [" + tunerChannel.getFrequency() + "]  - searching for another tuner");
+            }
 
             Iterator<Tuner> it = mTuners.iterator();
 
@@ -471,5 +481,21 @@ public class TunerModel extends AbstractTableModel implements Listener<TunerEven
         }
 
         return source;
+    }
+    
+    private Tuner findBestTuner(TunerChannel tunerChannel)
+    {
+        Tuner tuner = null;
+        
+        //Avoid changing tuner frequencies if possible so other channels aren't potentially interrupted
+        for (Tuner t: mTuners)
+        {
+            if (t.getTunerController().isTunedFor(tunerChannel))
+                return t;
+        }
+        
+        //TODO: Avoid changing the frequency of the tuner monitoring the control channel
+        
+        return tuner;
     }
 }
