@@ -189,11 +189,12 @@ public class PolyphaseChannelSourceManager extends ChannelSourceManager
             return currentCenterFrequency;
         }
 
-        double usableHalfBandwidth = mTunerController.getUsableHalfBandwidth();
 
         //Strategy 2: start by placing the center frequency exactly one channel width below the first channel frequency
         //and iteratively increase it one channel width at a time.  This optimally places the channels nearest to the
         //center of the bandwidth
+        double usableHalfBandwidth = mTunerController.getUsableHalfBandwidth();
+        
         long start = channels.first().getFrequency() - (int)mPolyphaseChannelManager.getChannelBandwidth();
 
         if(isValidCenterFrequency(channels, start))

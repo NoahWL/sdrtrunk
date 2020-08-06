@@ -26,6 +26,8 @@ import io.github.dsheirer.audio.AudioSegment;
 import io.github.dsheirer.channel.IChannelDescriptor;
 import io.github.dsheirer.channel.metadata.ChannelMetadata;
 import io.github.dsheirer.channel.metadata.ChannelMetadataModel;
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
+import io.github.dsheirer.controller.channel.event.ChannelGrantEvent;
 import io.github.dsheirer.controller.channel.map.ChannelMapModel;
 import io.github.dsheirer.filter.FilterSet;
 import io.github.dsheirer.identifier.Form;
@@ -185,21 +187,21 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
                 {
                     long frequency = ((SourceConfigTuner) channel.getSourceConfiguration()).getFrequency();
 
-                    if(!mUnTunableFrequencies.contains(frequency))
-                    {
-                        mUnTunableFrequencies.add(frequency);
+                    //if(!mUnTunableFrequencies.contains(frequency))
+                    //{
+                        //mUnTunableFrequencies.add(frequency);
                         mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequency +
                                 "] - " + ce.getMessage());
-                    }
+                    //}
                 }
                 else if(channel.getSourceConfiguration() instanceof SourceConfigTunerMultipleFrequency)
                 {
                     List<Long> frequencies = ((SourceConfigTunerMultipleFrequency) channel
                                                                                           .getSourceConfiguration()).getFrequencies();
 
-                    if(frequencies.size() > 0 && !mUnTunableFrequencies.contains(frequencies.get(0)))
+                    if(frequencies.size() > 0 /*&& !mUnTunableFrequencies.contains(frequencies.get(0))*/)
                     {
-                        mUnTunableFrequencies.add(frequencies.get(0));
+                        //mUnTunableFrequencies.add(frequencies.get(0));
                         mLog.error("Error starting requested channel [" + channel.getName() + ":" + frequencies +
                                 "] - " + ce.getMessage());
                     }
@@ -446,6 +448,11 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
         mProcessingChains.put(channel, processingChain);
 
         mChannelEventBroadcaster.broadcast(new ChannelEvent(channel, ChannelEvent.Event.NOTIFICATION_PROCESSING_START));
+    }
+    
+    private void createProcessingChain()
+    {
+        
     }
 
     /**

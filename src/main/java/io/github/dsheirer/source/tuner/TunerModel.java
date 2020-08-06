@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 public class TunerModel extends AbstractTableModel implements Listener<TunerEvent>
@@ -451,30 +452,34 @@ public class TunerModel extends AbstractTableModel implements Listener<TunerEven
             }
             
             tuner = findBestTuner(tunerChannel);
-            try
+            if (tuner != null)
             {
-                source = tuner.getChannelSourceManager().getSource(tunerChannel, channelSpecification);
-            }
-            catch(Exception e)
-            {
-                mLog.info("No tuners already tuned for [" + tunerChannel.getFrequency() + "]  - searching for another tuner");
-            }
-
-            Iterator<Tuner> it = mTuners.iterator();
-
-            while(it.hasNext() && source == null)
-            {
-                tuner = it.next();
-
-                if(!tuner.hasError())
+                try
                 {
-                    try
+                    source = tuner.getChannelSourceManager().getSource(tunerChannel, channelSpecification);
+                }
+                catch(Exception e)
+                {
+                    mLog.info("No tuners already tuned for [" + tunerChannel.getFrequency() + "]  - searching for another tuner");
+                }
+            } else
+            {
+                Iterator<Tuner> it = mTuners.iterator();
+                
+                while(it.hasNext() && source == null)
+                {
+                    tuner = it.next();
+
+                    if(!tuner.hasError())
                     {
-                        source = tuner.getChannelSourceManager().getSource(tunerChannel, channelSpecification);
-                    }
-                    catch(Exception e)
-                    {
-                        mLog.error("Error obtaining channel from tuner [" + tuner.getName() + "]", e);
+                        try
+                        {
+                            source = tuner.getChannelSourceManager().getSource(tunerChannel, channelSpecification);
+                        }
+                        catch(Exception e)
+                        {
+                            mLog.error("Error obtaining channel from tuner [" + tuner.getName() + "]", e);
+                        }
                     }
                 }
             }
@@ -483,19 +488,29 @@ public class TunerModel extends AbstractTableModel implements Listener<TunerEven
         return source;
     }
     
+    /**
+     * 
+     * @param tunerChannel
+     * @return
+     */
     private Tuner findBestTuner(TunerChannel tunerChannel)
     {
-        Tuner tuner = null;
-        
-        //Avoid changing tuner frequencies if possible so other channels aren't potentially interrupted
         for (Tuner t: mTuners)
-        {
-            if (t.getTunerController().isTunedFor(tunerChannel))
+        {   
+            //Frequency change of unlocked tuner will not interrupt other channels
+            if (!t.getTunerController().isLocked())
+                return t;
+        }
+        
+        for (Tuner t: mTuners)
+        {   
+            //Tuners already tuned for a channel can potentially source the channel without a frequency change
+            if (t.getTunerController().isTunedFor(tunerChannel)) // TODO: Polyphase Channelizer has additional checks
                 return t;
         }
         
         //TODO: Avoid changing the frequency of the tuner monitoring the control channel
         
-        return tuner;
+        return null;
     }
 }

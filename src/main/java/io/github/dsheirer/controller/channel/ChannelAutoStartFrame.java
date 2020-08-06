@@ -19,6 +19,7 @@
  */
 package io.github.dsheirer.controller.channel;
 
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
 import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.util.ThreadPool;
 import net.miginfocom.swing.MigLayout;

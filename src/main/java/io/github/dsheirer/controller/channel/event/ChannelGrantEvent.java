@@ -18,9 +18,10 @@
  * *****************************************************************************
  */
 
-package io.github.dsheirer.controller.channel;
+package io.github.dsheirer.controller.channel.event;
 
 import io.github.dsheirer.channel.IChannelDescriptor;
+import io.github.dsheirer.controller.channel.Channel;
 import io.github.dsheirer.identifier.IdentifierCollection;
 
 /**

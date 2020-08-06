@@ -23,7 +23,8 @@ package io.github.dsheirer.controller.channel;
 
 import io.github.dsheirer.alias.AliasModel;
 import io.github.dsheirer.controller.channel.Channel.ChannelType;
-import io.github.dsheirer.controller.channel.ChannelEvent.Event;
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
+import io.github.dsheirer.controller.channel.event.ChannelEvent.Event;
 import io.github.dsheirer.sample.Broadcaster;
 import io.github.dsheirer.sample.Listener;
 import javafx.collections.FXCollections;

@@ -21,10 +21,10 @@
 package io.github.dsheirer.module.decode.mpt1327;
 
 import io.github.dsheirer.controller.channel.Channel;
-import io.github.dsheirer.controller.channel.ChannelEvent;
-import io.github.dsheirer.controller.channel.ChannelGrantEvent;
-import io.github.dsheirer.controller.channel.IChannelEventListener;
-import io.github.dsheirer.controller.channel.IChannelEventProvider;
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
+import io.github.dsheirer.controller.channel.event.ChannelGrantEvent;
+import io.github.dsheirer.controller.channel.event.IChannelEventListener;
+import io.github.dsheirer.controller.channel.event.IChannelEventProvider;
 import io.github.dsheirer.controller.channel.map.ChannelMap;
 import io.github.dsheirer.identifier.Identifier;
 import io.github.dsheirer.identifier.IdentifierCollection;

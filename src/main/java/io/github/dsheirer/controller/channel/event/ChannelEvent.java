@@ -17,7 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  * *****************************************************************************
  */
-package io.github.dsheirer.controller.channel;
+package io.github.dsheirer.controller.channel.event;
+
+import io.github.dsheirer.controller.channel.Channel;
 
 public class ChannelEvent
 {

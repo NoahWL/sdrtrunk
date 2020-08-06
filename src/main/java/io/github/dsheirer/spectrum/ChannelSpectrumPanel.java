@@ -20,9 +20,9 @@
 package io.github.dsheirer.spectrum;
 
 import io.github.dsheirer.controller.channel.Channel;
-import io.github.dsheirer.controller.channel.ChannelEvent;
-import io.github.dsheirer.controller.channel.ChannelEventListener;
 import io.github.dsheirer.controller.channel.ChannelProcessingManager;
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
+import io.github.dsheirer.controller.channel.event.ChannelEventListener;
 import io.github.dsheirer.dsp.filter.Filters;
 import io.github.dsheirer.dsp.filter.Window.WindowType;
 import io.github.dsheirer.dsp.filter.halfband.real.HalfBandFilter;

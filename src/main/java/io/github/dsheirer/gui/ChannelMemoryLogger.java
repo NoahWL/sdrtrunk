@@ -1,8 +1,9 @@
 package io.github.dsheirer.gui;
 
 import io.github.dsheirer.controller.channel.Channel.ChannelType;
-import io.github.dsheirer.controller.channel.ChannelEvent;
-import io.github.dsheirer.controller.channel.ChannelEventListener;
+import io.github.dsheirer.controller.channel.event.ChannelEvent;
+import io.github.dsheirer.controller.channel.event.ChannelEventListener;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
