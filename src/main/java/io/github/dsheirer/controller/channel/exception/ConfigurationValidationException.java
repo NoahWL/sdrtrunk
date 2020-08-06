@@ -1,4 +1,4 @@
-package io.github.dsheirer.controller.channel;
+package io.github.dsheirer.controller.channel.exception;
 
 import java.awt.*;
 

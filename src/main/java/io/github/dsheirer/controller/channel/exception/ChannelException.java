@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>
  ******************************************************************************/
-package io.github.dsheirer.controller.channel;
+package io.github.dsheirer.controller.channel.exception;
 
 /**
  * Exception for channel start/stop errors

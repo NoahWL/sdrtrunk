@@ -25,7 +25,7 @@ package io.github.dsheirer.gui.playlist.manager;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.io.Files;
 import io.github.dsheirer.controller.channel.Channel;
-import io.github.dsheirer.controller.channel.ChannelException;
+import io.github.dsheirer.controller.channel.exception.ChannelException;
 import io.github.dsheirer.eventbus.MyEventBus;
 import io.github.dsheirer.playlist.PlaylistManager;
 import io.github.dsheirer.preference.PreferenceType;

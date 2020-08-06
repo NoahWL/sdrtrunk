@@ -28,6 +28,7 @@ import io.github.dsheirer.channel.metadata.ChannelMetadata;
 import io.github.dsheirer.channel.metadata.ChannelMetadataModel;
 import io.github.dsheirer.controller.channel.event.ChannelEvent;
 import io.github.dsheirer.controller.channel.event.ChannelGrantEvent;
+import io.github.dsheirer.controller.channel.exception.ChannelException;
 import io.github.dsheirer.controller.channel.map.ChannelMapModel;
 import io.github.dsheirer.filter.FilterSet;
 import io.github.dsheirer.identifier.Form;

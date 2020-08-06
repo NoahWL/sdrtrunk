@@ -24,7 +24,7 @@ package io.github.dsheirer.gui.playlist.channel;
 
 import io.github.dsheirer.alias.AliasModel;
 import io.github.dsheirer.controller.channel.Channel;
-import io.github.dsheirer.controller.channel.ChannelException;
+import io.github.dsheirer.controller.channel.exception.ChannelException;
 import io.github.dsheirer.eventbus.MyEventBus;
 import io.github.dsheirer.gui.control.MaxLengthUnaryOperator;
 import io.github.dsheirer.gui.playlist.Editor;
