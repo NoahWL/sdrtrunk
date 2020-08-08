@@ -286,7 +286,7 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
             throw new ChannelException("Channel is already playing");
         }
 
-        //Ensure that we can get a source before we construct a new processing chain
+        //Ensure that we can get a source before we construct a new processing chain (if a new chain is required)
         Source source = null;
 
         try
@@ -450,11 +450,6 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
 
         mChannelEventBroadcaster.broadcast(new ChannelEvent(channel, ChannelEvent.Event.NOTIFICATION_PROCESSING_START));
     }
-    
-    private void createProcessingChain()
-    {
-        
-    }
 
     /**
      * Stops the channel/processing chain.
@@ -569,5 +564,49 @@ public class ChannelProcessingManager implements Listener<ChannelEvent>
     public void removeChannelEventListener(Listener<ChannelEvent> listener)
     {
         mChannelEventBroadcaster.removeListener(listener);
+    }
+    
+    private class ChainShutdownListener implements Listener<SourceEvent>
+    {
+        private final Channel mChannel;
+        
+        public ChainShutdownListener(Channel channel)
+        {
+            mChannel = channel;
+        }
+        
+        @Override
+        public void receive(SourceEvent sourceEvent)
+        {
+            if(sourceEvent.getEvent() == SourceEvent.Event.NOTIFICATION_ERROR_STATE && sourceEvent.getSource() != null)
+            {
+                Channel toShutdown = null;
+
+                for(Map.Entry<Channel,ProcessingChain> entry: mProcessingChains.entrySet())
+                {
+                    if(entry.getValue().hasSource(sourceEvent.getSource()))
+                    {
+                        toShutdown = entry.getKey();
+                        break;
+                    }
+                }
+
+                if(toShutdown != null)
+                {
+                    mLog.warn("Channel source error detected - stopping channel [" + toShutdown.getName() + "]");
+
+                    try
+                    {
+                        stopProcessing(toShutdown, true);
+                    }
+                    catch(ChannelException ce)
+                    {
+                        mLog.error("Error stopping channel [" + mChannel.getName() + "] with source error - " +
+                            ce.getMessage());
+                    }
+                }
+            }
+        }
+        
     }
 }
