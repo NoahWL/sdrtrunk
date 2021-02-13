@@ -131,6 +131,8 @@ public class R820TTunerController extends RTL2832TunerController
                 setFrequencyCorrection(correction);
 
                 getFrequencyErrorCorrectionManager().setEnabled(config.getAutoPPMCorrectionEnabled());
+                
+                setUsableBandwidthPercentage(config.getUsableBandwidthPercentage());
 
                 R820TGain masterGain = config.getMasterGain();
                 setGain(masterGain, true);

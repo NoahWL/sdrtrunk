@@ -31,6 +31,7 @@ public class R820TTunerConfiguration extends TunerConfiguration
     private double mFrequencyCorrection = 0.0d;
     private RTL2832TunerController.SampleRate mSampleRate = RTL2832TunerController.SampleRate.RATE_2_400MHZ;
     private boolean mAutoPPMCorrection = true;
+    private double mUsableBandwidthPercentage = R820TTunerController.USABLE_BANDWIDTH_PERCENT;
 
     /**
      * Default constructor for JAXB
@@ -134,5 +135,16 @@ public class R820TTunerConfiguration extends TunerConfiguration
     public void setAutoPPMCorrectionEnabled(boolean enabled)
     {
         mAutoPPMCorrection = enabled;
+    }
+    
+    @JacksonXmlProperty(isAttribute = true, localName = "usable_bandwidth_percentage")
+    public double getUsableBandwidthPercentage()
+    {
+    	return mUsableBandwidthPercentage;
+    }
+    
+    public void setUsableBandwidthPercentage(double usableBandwidth)
+    {
+    	mUsableBandwidthPercentage = usableBandwidth;
     }
 }

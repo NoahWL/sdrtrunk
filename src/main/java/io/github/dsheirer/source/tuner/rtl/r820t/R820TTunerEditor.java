@@ -65,6 +65,7 @@ public class R820TTunerEditor extends TunerConfigurationEditor
     private JButton mTunerInfo;
     private JComboBox<SampleRate> mComboSampleRate;
     private JSpinner mFrequencyCorrection;
+    private JSpinner mUsableBandwidth;
     private JCheckBox mAutoPPMEnabled;
     private JComboBox<R820TGain> mComboMasterGain;
     private JComboBox<R820TMixerGain> mComboMixerGain;
@@ -203,10 +204,7 @@ public class R820TTunerEditor extends TunerConfigurationEditor
 
         add(new JLabel("PPM:"));
         add(mFrequencyCorrection);
-
-        add(new JLabel("")); //Space filler
-        add(new JLabel("")); //Space filler
-        add(new JLabel("")); //Space filler
+        
         mAutoPPMEnabled = new JCheckBox("PPM Auto-Correction");
         mAutoPPMEnabled.addActionListener(new ActionListener()
         {
@@ -218,6 +216,35 @@ public class R820TTunerEditor extends TunerConfigurationEditor
                 save();
             }
         });
+        
+        
+        /**
+         * Usable bandwidth percentage
+         */
+        mUsableBandwidth = new JSpinner(new SpinnerNumberModel(1.0, 0.0, 1.0, 0.01));
+		mUsableBandwidth.setEnabled(false);
+		
+		JSpinner.NumberEditor usableBandwidthEditor = (JSpinner.NumberEditor)mUsableBandwidth.getEditor();
+		usableBandwidthEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+		usableBandwidthEditor.getFormat().setMinimumFractionDigits(1);
+		usableBandwidthEditor.getFormat().setMaximumFractionDigits(2);
+		
+		mUsableBandwidth.addChangeListener(new ChangeListener()
+        {
+            @Override
+            public void stateChanged(ChangeEvent e)
+            {
+                final double value = ((SpinnerNumberModel)mUsableBandwidth
+                    .getModel()).getNumber().doubleValue();
+                mController.setUsableBandwidthPercentage(value);
+                save();
+            }
+        });
+        
+        add(new JLabel("Usable Bandwidth %:"));
+        add(mUsableBandwidth);
+        
+        add(new JLabel("")); //Space filler
         add(mAutoPPMEnabled);
 
         add(new JSeparator(JSeparator.HORIZONTAL), "span,grow");
@@ -457,6 +484,11 @@ public class R820TTunerEditor extends TunerConfigurationEditor
         {
             mAutoPPMEnabled.setEnabled(enabled);
         }
+        
+        if(mUsableBandwidth.isEnabled() != enabled)
+        {
+        	mUsableBandwidth.setEnabled(enabled);
+        }
 
         updateSampleRateToolTip();
 
@@ -548,6 +580,10 @@ public class R820TTunerEditor extends TunerConfigurationEditor
             config.setFrequencyCorrection(value);
 
             config.setAutoPPMCorrectionEnabled(mAutoPPMEnabled.isSelected());
+            
+            double usableBandwidthValue = ((SpinnerNumberModel)mUsableBandwidth
+            	.getModel()).getNumber().doubleValue();
+            config.setUsableBandwidthPercentage(usableBandwidthValue);
 
             config.setSampleRate((SampleRate)mComboSampleRate.getSelectedItem());
 
@@ -586,6 +622,7 @@ public class R820TTunerEditor extends TunerConfigurationEditor
                 mConfigurationName.setText(config.getName());
                 mFrequencyCorrection.setValue(config.getFrequencyCorrection());
                 mAutoPPMEnabled.setSelected(config.getAutoPPMCorrectionEnabled());
+                mUsableBandwidth.setValue(config.getUsableBandwidthPercentage());
                 mComboSampleRate.setSelectedItem(config.getSampleRate());
                 mComboMasterGain.setSelectedItem(config.getMasterGain());
                 mComboMixerGain.setSelectedItem(config.getMixerGain());
